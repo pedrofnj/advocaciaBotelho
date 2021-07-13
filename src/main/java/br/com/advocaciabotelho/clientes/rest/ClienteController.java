@@ -29,7 +29,8 @@ public class ClienteController {
     // Buscando por id
     @GetMapping("{id}")
     public Cliente buscarPorId(@PathVariable Integer id){
-        return repository.findById(id).orElseThrow( ()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"Cliente não encontrado"));
+        return repository.findById(id).orElseThrow(
+                ()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"Cliente não encontrado"));
     }
     // Listando clientes
     @GetMapping
@@ -45,13 +46,20 @@ public class ClienteController {
             repository.delete(cliente);
             return Void.TYPE; }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Cliente não encontrado"));
     }
+
+    // Atualizando dados cliente
     @PutMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void atualizar(@PathVariable Integer id, @RequestBody Cliente clienteAtualizado){
         repository.findById(id).map( cliente -> {
-        cliente.setNome(cliente.getNome());
-        cliente.setDataNascimento(cliente.getDataNascimento());
-        cliente.setCpf(cliente.getCpf());
+        cliente.setNome(clienteAtualizado.getNome());
+        cliente.setDataNascimento(clienteAtualizado.getDataNascimento());
+        cliente.setCpf(clienteAtualizado.getCpf());
+        cliente.setRg(clienteAtualizado.getRg());
+        cliente.setNomeDaMae(clienteAtualizado.getNomeDaMae());
+        cliente.setNomeDoPai(clienteAtualizado.getNomeDoPai());
+        cliente.setEmail(clienteAtualizado.getEmail());
+        cliente.setEndereco(clienteAtualizado.getEndereco());
         return repository.save(cliente);
         }).orElseThrow(() ->new ResponseStatusException(HttpStatus.NOT_FOUND,"Cliente não encontrado"));
     }
